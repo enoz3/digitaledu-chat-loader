@@ -3,7 +3,7 @@
 
   var RUNTIME_URL = "https://raw.githubusercontent.com/enoz3/digitaledu-chat-loader/main/runtime.json";
   var RUNTIME_MIRROR_URL = "https://cdn.jsdelivr.net/gh/enoz3/digitaledu-chat-loader@main/runtime.json";
-  var DEFAULT_BASE_URL = "https://imperial-expenditures-cameras-under.trycloudflare.com";
+  var DEFAULT_BASE_URL = "https://roy-canberra-ent-barn.trycloudflare.com";
 
   function getCurrentScript() {
     return (
