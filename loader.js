@@ -3,7 +3,7 @@
 
   var RUNTIME_URL = "https://raw.githubusercontent.com/enoz3/digitaledu-chat-loader/main/runtime.json";
   var RUNTIME_MIRROR_URL = "https://cdn.jsdelivr.net/gh/enoz3/digitaledu-chat-loader@main/runtime.json";
-  var DEFAULT_BASE_URL = "https://roy-canberra-ent-barn.trycloudflare.com";
+  var DEFAULT_BASE_URL = "https://34.63.212.111.sslip.io";
   var DEFAULT_SECONDARY_BASE_URL = "https://resolved-return-cute-employee.trycloudflare.com";
   var WIDGET_LOAD_TIMEOUT_MS = 8000;
 
