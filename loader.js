@@ -2,6 +2,8 @@
   "use strict";
 
   var RUNTIME_URL = "https://raw.githubusercontent.com/enoz3/digitaledu-chat-loader/main/runtime.json";
+  var RUNTIME_MIRROR_URL = "https://cdn.jsdelivr.net/gh/enoz3/digitaledu-chat-loader@main/runtime.json";
+  var DEFAULT_BASE_URL = "https://blogging-proposal-why-campbell.trycloudflare.com";
 
   function getCurrentScript() {
     return (
@@ -22,6 +24,19 @@
     } catch (e) {
       return "";
     }
+  }
+
+  function readRuntime(url) {
+    return fetch(url + "?t=" + Date.now(), { cache: "no-store" }).then(function (res) {
+      if (!res.ok) throw new Error("runtime_fetch_failed:" + res.status);
+      return res.json();
+    });
+  }
+
+  function resolveFallbackBase(sourceScript) {
+    var attrBase = sourceScript ? sourceScript.getAttribute("data-fallback-base-url") : "";
+    var dataBase = sourceScript ? sourceScript.getAttribute("data-base-url") : "";
+    return normalizeBaseUrl(attrBase) || normalizeBaseUrl(dataBase) || DEFAULT_BASE_URL;
   }
 
   function injectWidget(baseUrl, sourceScript, runtime) {
@@ -51,12 +66,11 @@
 
   function boot() {
     var sourceScript = getCurrentScript();
-    var fallbackBase = sourceScript ? sourceScript.getAttribute("data-fallback-base-url") : "";
+    var fallbackBase = resolveFallbackBase(sourceScript);
 
-    fetch(RUNTIME_URL + "?t=" + Date.now(), { cache: "no-store" })
-      .then(function (res) {
-        if (!res.ok) throw new Error("runtime_fetch_failed:" + res.status);
-        return res.json();
+    readRuntime(RUNTIME_URL)
+      .catch(function () {
+        return readRuntime(RUNTIME_MIRROR_URL);
       })
       .then(function (runtime) {
         var base = runtime && runtime.base_url ? runtime.base_url : fallbackBase;
