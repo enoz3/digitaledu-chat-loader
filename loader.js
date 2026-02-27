@@ -97,7 +97,11 @@
         resolve();
       }
 
-      widgetScript.src = normalizedBase + "/widget.js";
+      var runtimeVersion = runtime && typeof runtime.updated_at === "string" ? runtime.updated_at.trim() : "";
+      if (!runtimeVersion) {
+        runtimeVersion = String(Date.now());
+      }
+      widgetScript.src = normalizedBase + "/widget.js?v=" + encodeURIComponent(runtimeVersion);
       widgetScript.setAttribute("data-base-url", normalizedBase);
       widgetScript.setAttribute("data-ccdlc-widget", "pending");
 
