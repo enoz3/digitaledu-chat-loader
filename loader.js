@@ -155,12 +155,7 @@
       })
       .then(function (runtime) {
         var runtimeBase = runtime && runtime.base_url ? runtime.base_url : "";
-        var runtimeSecondary = runtime && runtime.secondary_base_url ? runtime.secondary_base_url : "";
-        injectWidgetCandidates(
-          [runtimeBase, fallback.fallbackBase, runtimeSecondary, fallback.secondaryBase],
-          sourceScript,
-          runtime || {}
-        );
+        injectWidgetCandidates([runtimeBase, fallback.fallbackBase, fallback.secondaryBase], sourceScript, runtime || {});
       })
       .catch(function () {
         injectWidgetCandidates([fallback.fallbackBase, fallback.secondaryBase], sourceScript, {});
