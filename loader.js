@@ -117,6 +117,16 @@
         widgetScript.setAttribute("data-position", position);
       }
 
+      var siteKey = sourceScript && sourceScript.getAttribute("data-site-key");
+      if (siteKey && siteKey.trim()) {
+        widgetScript.setAttribute("data-site-key", siteKey.trim());
+      }
+
+      var siteLabel = sourceScript && sourceScript.getAttribute("data-site-label");
+      if (siteLabel && siteLabel.trim()) {
+        widgetScript.setAttribute("data-site-label", siteLabel.trim());
+      }
+
       widgetScript.onload = function () {
         finalize(null);
       };
