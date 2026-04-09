@@ -53,7 +53,8 @@
     var attrSecondary = sourceScript ? sourceScript.getAttribute("data-secondary-base-url") : "";
     var dataBase = sourceScript ? sourceScript.getAttribute("data-base-url") : "";
     return {
-      fallbackBase: normalizeBaseUrl(attrBase) || normalizeBaseUrl(dataBase) || DEFAULT_BASE_URL,
+      preferredBase: normalizeBaseUrl(dataBase),
+      fallbackBase: normalizeBaseUrl(attrBase) || DEFAULT_BASE_URL,
       secondaryBase: normalizeBaseUrl(attrSecondary) || DEFAULT_SECONDARY_BASE_URL
     };
   }
@@ -104,6 +105,15 @@
       widgetScript.src = normalizedBase + "/widget.js?v=" + encodeURIComponent(runtimeVersion);
       widgetScript.setAttribute("data-base-url", normalizedBase);
       widgetScript.setAttribute("data-ccdlc-widget", "pending");
+
+      var passthroughAttrs = ["data-site-key", "data-site-label", "data-title", "data-accent"];
+      for (var i = 0; i < passthroughAttrs.length; i += 1) {
+        var attrName = passthroughAttrs[i];
+        var attrValue = sourceScript && sourceScript.getAttribute(attrName);
+        if (attrValue && attrValue.trim()) {
+          widgetScript.setAttribute(attrName, attrValue.trim());
+        }
+      }
 
       var avatarAttr = sourceScript && sourceScript.getAttribute("data-avatar");
       var runtimeAvatar = runtime && typeof runtime.avatar_url === "string" ? runtime.avatar_url.trim() : "";
@@ -157,13 +167,23 @@
         var runtimeBase = runtime && runtime.base_url ? runtime.base_url : "";
         var runtimeSecondary = runtime && runtime.secondary_base_url ? runtime.secondary_base_url : "";
         injectWidgetCandidates(
-          [runtimeBase, fallback.fallbackBase, runtimeSecondary, fallback.secondaryBase],
+          [
+            fallback.preferredBase,
+            fallback.fallbackBase,
+            runtimeBase,
+            runtimeSecondary,
+            fallback.secondaryBase
+          ],
           sourceScript,
           runtime || {}
         );
       })
       .catch(function () {
-        injectWidgetCandidates([fallback.fallbackBase, fallback.secondaryBase], sourceScript, {});
+        injectWidgetCandidates(
+          [fallback.preferredBase, fallback.fallbackBase, fallback.secondaryBase],
+          sourceScript,
+          {}
+        );
       });
   }
 
