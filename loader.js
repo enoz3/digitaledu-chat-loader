@@ -3,9 +3,9 @@
 
   var RUNTIME_URL = "https://raw.githubusercontent.com/enoz3/digitaledu-chat-loader/main/runtime.json";
   var RUNTIME_MIRROR_URL = "https://cdn.jsdelivr.net/gh/enoz3/digitaledu-chat-loader@main/runtime.json";
-  var DEFAULT_BASE_URL = "https://34.63.212.111.sslip.io";
+  var DEFAULT_BASE_URL = "https://rocky-demand-restore-chess.trycloudflare.com";
   var DEFAULT_SECONDARY_BASE_URL = "";
-  var WIDGET_LOAD_TIMEOUT_MS = 15000;
+  var WIDGET_LOAD_TIMEOUT_MS = 8000;
 
   function getCurrentScript() {
     return (
@@ -117,16 +117,6 @@
         widgetScript.setAttribute("data-position", position);
       }
 
-      var siteKey = sourceScript && sourceScript.getAttribute("data-site-key");
-      if (siteKey && siteKey.trim()) {
-        widgetScript.setAttribute("data-site-key", siteKey.trim());
-      }
-
-      var siteLabel = sourceScript && sourceScript.getAttribute("data-site-label");
-      if (siteLabel && siteLabel.trim()) {
-        widgetScript.setAttribute("data-site-label", siteLabel.trim());
-      }
-
       widgetScript.onload = function () {
         finalize(null);
       };
@@ -165,7 +155,12 @@
       })
       .then(function (runtime) {
         var runtimeBase = runtime && runtime.base_url ? runtime.base_url : "";
-        injectWidgetCandidates([runtimeBase, fallback.fallbackBase, fallback.secondaryBase], sourceScript, runtime || {});
+        var runtimeSecondary = runtime && runtime.secondary_base_url ? runtime.secondary_base_url : "";
+        injectWidgetCandidates(
+          [runtimeBase, fallback.fallbackBase, runtimeSecondary, fallback.secondaryBase],
+          sourceScript,
+          runtime || {}
+        );
       })
       .catch(function () {
         injectWidgetCandidates([fallback.fallbackBase, fallback.secondaryBase], sourceScript, {});
